@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const DefaultComponent = () => {
+const Profile = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Hello, this is a default component!</Text>
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DefaultComponent;
+export default Profile;
