@@ -42,6 +42,7 @@ export default function CameraScreen() {
           encoding: FileSystem.EncodingType.Base64,
         });
 
+        // Stores in supabase bucket called images
         const { data, error } = await supabase.storage.from('images')
         .upload(`images/${Date.now()}.jpg`, decode(photo), {
           contentType: 'image/jpeg',
