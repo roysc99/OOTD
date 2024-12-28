@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons"; // For tab icons
 import HomeNavigator from "../navigation/HomeNavigator";
 import Profile from "../screens/Profile";
 import Leaderboard from "../screens/Leaderboard";
-import CameraScreen from "../screens/CameraScreen"; // Import your Camera screen
+import CameraNavigator from "../navigation/CameraNavigator";
 import Header from "../components/HomeHeader";
 
 const Tab = createBottomTabNavigator();
@@ -13,13 +13,13 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        header: () => {
+        header: () => { // Only have header when we are on the home page, but this can be changed
           if (route.name === "Home") {
             return <Header title="OOTD" />;
           }
           return null;
         },
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size }) => { // Default icons 
           let iconName;
           if (route.name === "Home") {
             iconName = "home";
@@ -40,11 +40,12 @@ const TabNavigator = () => {
         name="Home"
         component={HomeNavigator}
       />
+      {/** Use CameraNavigator here */}
       <Tab.Screen
         name="Camera"
-        component={CameraScreen}
+        component={CameraNavigator}
         options={{
-          tabBarStyle: { display: "none" }, // Optional: hide tab bar on Camera screen
+          tabBarStyle: { display: "none" }, // Optional: hide tab bar on Camera/Preview
         }}
       />
       <Tab.Screen name="Leaderboard" component={Leaderboard} />

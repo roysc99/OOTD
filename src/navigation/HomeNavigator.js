@@ -2,7 +2,6 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import FollowingFeed from "../screens/FollowingFeed";
 import GlobalFeed from "../screens/GlobalFeed";
-import HomeSearch from "../screens/HomeSearch";
 
 const Stack = createStackNavigator();
 

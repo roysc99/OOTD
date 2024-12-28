@@ -26,7 +26,7 @@ export default function HomeHeader({}) {
           <Pressable
             onPress={() => {
               setActiveButton("Following");
-              navigation.navigate("HomeNavigator", { screen: "FollowingFeed" });
+              navigation.navigate("Home", { screen: "FollowingFeed" });
             }}
             style={styles.textButton}
           >
@@ -43,7 +43,7 @@ export default function HomeHeader({}) {
           <Pressable
             onPress={() => {
               setActiveButton("Global");
-              navigation.navigate("HomeNavigator", { screen: "GlobalFeed" });
+              navigation.navigate("Home", { screen: "GlobalFeed" });
             }}
           >
             <Text
