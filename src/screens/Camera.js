@@ -10,6 +10,12 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../utils/supabaseClient';
+import { decode } from 'base64-arraybuffer';
+
+
+import * as FileSystem from 'expo-file-system';
 
 export default function CameraScreen() {
   const navigation = useNavigation();
@@ -32,8 +38,27 @@ export default function CameraScreen() {
     try {
       const result = await cameraRef.current?.takePictureAsync?.({});
       if (result?.uri) {
-        // Navigate to the next screen in the stack (PreviewScreen)
-        navigation.navigate('PhotoPreview', { photoUri: result.uri });
+        const photo = await FileSystem.readAsStringAsync(result.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        const { data, error } = await supabase.storage.from('images')
+        .upload(`images/${Date.now()}.jpg`, decode(photo), {
+          contentType: 'image/jpeg',
+        });
+
+        if (data) {
+
+          const publicUrl = supabase
+            .storage
+            .from('images')
+            .getPublicUrl(data.path).data.publicUrl;
+
+          // Navigate to the next screen in the stack (PreviewScreen)
+          navigation.navigate('PhotoPreview', { photoUri: result.uri });
+        }
+        if (error) console.error('Upload error:', error);
+
       }
     } catch (e) {
       console.error('Capture error:', e);
