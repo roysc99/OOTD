@@ -1,25 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text } from "react-native";
+import LogoutButton from "../components/LogoutButton"; // Adjust path to where you defined LogoutButton
 
-const Profile = () => {
+export default function ProfileScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hello, this is a default component!</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Profile Screen</Text>
+      <LogoutButton />
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  text: {
-    fontSize: 20,
-    color: '#333',
-  },
-});
-
-export default Profile;
+}

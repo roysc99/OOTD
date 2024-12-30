@@ -1,7 +1,7 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import Camera from '../screens/Camera'; 
-import PhotoPreview from '../screens/PhotoPreview'; // <-- Your new preview screen
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import Camera from "../screens/CameraScreen";
+import PhotoPreview from "../screens/PhotoPreview"; // <-- Your new preview screen
 
 const CameraStack = createStackNavigator();
 
