@@ -10,10 +10,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { createClient } from "@supabase/supabase-js";
-import { supabase } from "../utils/supabaseClient";
 import { decode } from "base64-arraybuffer";
 
+import supabase from "../utils/supabaseClient";
 import * as FileSystem from "expo-file-system";
 
 export default function CameraScreen() {
@@ -56,7 +55,7 @@ export default function CameraScreen() {
           // Navigate to the next screen in the stack (PreviewScreen)
           navigation.navigate("PhotoPreview", { photoUri: result.uri });
         }
-        if (error) throw new Error("Upload error:", error);
+        if (error) throw new Error(error.message);
       }
     } catch (e) {
       console.error("Capture error:", e);
