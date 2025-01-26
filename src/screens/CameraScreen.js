@@ -1,5 +1,5 @@
 // CameraScreen.js
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,12 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { decode } from "base64-arraybuffer";
-
-import supabase from "../utils/supabaseClient";
-import * as FileSystem from "expo-file-system";
 
 export default function CameraScreen() {
   const navigation = useNavigation();
@@ -34,28 +30,10 @@ export default function CameraScreen() {
 
   const takePicture = async () => {
     try {
-      const result = await cameraRef.current?.takePictureAsync?.({});
+      let result = await cameraRef.current?.takePictureAsync?.({});
       if (result?.uri) {
-        const photo = await FileSystem.readAsStringAsync(result.uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        // Stores in supabase bucket called images
-        const { data, error } = await supabase.storage
-          .from("images")
-          .upload(`images/${Date.now()}.jpg`, decode(photo), {
-            contentType: "image/jpeg",
-          });
-
-        if (data) {
-          const publicUrl = supabase.storage
-            .from("images")
-            .getPublicUrl(data.path).data.publicUrl;
-
-          // Navigate to the next screen in the stack (PreviewScreen)
-          navigation.navigate("PhotoPreview", { photoUri: result.uri });
-        }
-        if (error) throw new Error(error.message);
+        // Navigate to the next screen in the stack (PreviewScreen)
+        navigation.navigate("PhotoPreview", { photoUri: result.uri });
       }
     } catch (e) {
       console.error("Capture error:", e);
