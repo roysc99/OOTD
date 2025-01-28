@@ -28,7 +28,7 @@ export default function PreviewScreen() {
       //upload in supabase storage 'images'
       const { data, error } = await supabase.storage
         .from("images")
-        .upload(`images/${Date.now()}.jpg`, decode(photo), {
+        .upload(`outfits/${Date.now()}.jpg`, decode(photo), {
           contentType: "image/jpeg",
         });
       if (data) {
