@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import supabase from "../utils/supabaseClient";
 import {
   FlingGestureHandler,
@@ -64,20 +64,25 @@ export default function GlobalFeed() {
     </FlingGestureHandler>
   );
 }
-
+const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
+    backgroundColor: "white",
   },
   text: {
     fontSize: 20,
     color: "#333",
   },
   image: {
-    width: 393,
-    height: 604,
+    width: width * 0.95,
+    height: height * 0.7,
+    borderRadius: 25,
+    overflow: "hidden",
+    marginHorizontal: 5,
+    backgroundColor: "#fff",
   },
 });

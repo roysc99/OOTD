@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 /* Homepage header that displays Following, Global, and Search */
 export default function HomeHeader({}) {
   //states for when following page is active or global
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeButton, setActiveButton] = useState("Global");
   const navigation = useNavigation();
 
   return (

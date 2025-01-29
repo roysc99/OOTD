@@ -50,9 +50,7 @@ export default function CameraScreen() {
       >
         <View style={styles.overlay}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Home", { screen: "FollowingFeed" })
-            }
+            onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="chevron-back-outline" size={35} color="#fff" />
