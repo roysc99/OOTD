@@ -51,16 +51,16 @@ export default function PreviewScreen() {
         <Button title="No Photo" onPress={() => navigation.goBack()} />
       )}
 
-      <View style={styles.overlay}>
+      <View>
         <TouchableOpacity
-          style={styles.iconButton}
+          style={styles.redoButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back-circle-outline" size={52} color="#fff" />
+          <Ionicons name="close-outline" size={40} color="#fff" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={handleUpload}>
-          <Ionicons name="checkmark-circle-outline" size={52} color="#fff" />
+        <TouchableOpacity style={styles.sendButton} onPress={handleUpload}>
+          <Ionicons name="send-outline" size={45} color="#fff" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -70,24 +70,34 @@ export default function PreviewScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#111", // Helps show full screen contrast
+    backgroundColor: "black",
   },
   fullImage: {
     flex: 1,
-    resizeMode: "contain", // or 'cover'
+    marginHorizontal: 10,
+    marginVertical: 20,
+    borderRadius: 20,
+    overflow: "hidden",
   },
-  overlay: {
+  sendButton: {
     position: "absolute",
-    bottom: 60, // Positions icons near the bottom
+    bottom: 40,
     left: 0,
     right: 0,
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
   },
-  iconButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    padding: 10,
-    borderRadius: 30,
+  redoButton: {
+    position: "absolute",
+    top: -725,
+    left: 20,
+  },
+  camera: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 20,
+    borderRadius: 20,
+    overflow: "hidden",
   },
 });

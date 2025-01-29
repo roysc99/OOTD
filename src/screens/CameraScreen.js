@@ -41,29 +41,29 @@ export default function CameraScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
       <CameraView
         ref={cameraRef}
-        style={{ flex: 1 }}
+        style={styles.camera}
         facing={facing}
         mirror={true}
       >
         <View style={styles.overlay}>
           <TouchableOpacity
-            style={styles.iconButton}
             onPress={() =>
               navigation.navigate("Home", { screen: "FollowingFeed" })
             }
+            style={styles.backButton}
           >
-            <Ionicons name="arrow-back-circle-outline" size={42} color="#fff" />
+            <Ionicons name="chevron-back-outline" size={35} color="#fff" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.iconButton} onPress={takePicture}>
-            <Ionicons name="camera-outline" size={52} color="#fff" />
+          <TouchableOpacity style={styles.cameraButton} onPress={takePicture}>
+            <Ionicons name="radio-button-on-outline" size={90} color="#fff" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.iconButton} onPress={flipCamera}>
-            <Ionicons name="camera-reverse-outline" size={42} color="#fff" />
+          <TouchableOpacity style={styles.flipButton} onPress={flipCamera}>
+            <Ionicons name="repeat-outline" size={35} color="#fff" />
           </TouchableOpacity>
         </View>
       </CameraView>
@@ -75,16 +75,32 @@ const styles = StyleSheet.create({
   // Updated overlay styles:
   overlay: {
     position: "absolute",
-    bottom: 40, // Positions icons near the bottom
+    bottom: 0, // Positions icons near the bottom
     left: 0,
     right: 0,
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
   },
-  iconButton: {
-    backgroundColor: "rgba(0,0,0,0.4)",
+  flipButton: {
+    position: "absolute",
+    top: -595,
+    right: 15,
+  },
+  backButton: {
+    position: "absolute",
+    top: -595,
+    left: 10,
+  },
+  cameraButton: {
     padding: 10,
     borderRadius: 30,
+  },
+  camera: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 20,
+    borderRadius: 20,
+    overflow: "hidden",
   },
 });
