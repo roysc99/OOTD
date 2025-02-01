@@ -1,18 +1,47 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AuthContext } from "../context/AuthProvider";
+import supabase from "../utils/supabaseClient";
 import TabNavigator from "./TabNavigator";
-import HomeSearch from "../screens/HomeSearch";
 import LoginNavigator from "../navigation/LoginNavigator";
+import LoadingScreen from "../components/LoadingScreen";
+import HomeSearch from "../screens/HomeSearch";
 
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
-  const { user } = useContext(AuthContext);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function checkUserSession() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+      setTimeout(() => {
+        setInitializing(false);
+      }, 1000);
+    }
+    checkUserSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  if (initializing) {
+    return <LoadingScreen />;
+  }
+
   return (
     <Stack.Navigator>
       {user ? (
-        // User is signed in
         <>
           <Stack.Screen
             name="MainTabs"
@@ -26,7 +55,7 @@ export default function AppNavigator() {
           />
         </>
       ) : (
-        // No user is signed in
+        // Render the logged-out navigator (LoginNavigator)
         <Stack.Screen
           name="LoginNav"
           component={LoginNavigator}
