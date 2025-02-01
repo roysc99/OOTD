@@ -10,13 +10,13 @@ const HomeNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="FollowingFeed"
-        component={FollowingFeed}
+        name="GlobalFeed"
+        component={GlobalFeed}
         options={{ headerShown: false, animation: "none" }}
       />
       <Stack.Screen
-        name="GlobalFeed"
-        component={GlobalFeed}
+        name="FollowingFeed"
+        component={FollowingFeed}
         options={{ headerShown: false, animation: "none" }}
       />
     </Stack.Navigator>

@@ -1,80 +1,112 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { useAuth } from "../context/AuthProvider"; // Adjust path to your AuthProvider if using a custom hook
+import {
+  Alert,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import supabase from "../utils/supabaseClient";
+import { Button, Input } from "@rneui/themed";
 
-const SignupScreen = ({ navigation }) => {
+export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth(); // If you have a login function in your AuthProvider
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = async () => {
-    try {
-      // This is where you'd typically call your backend or a service like Firebase:
-      //   await auth().createUserWithEmailAndPassword(email, password);
-
-      // For this example, we’ll just pretend it worked and store the user in context.
-      const mockUserData = { email, name: "New User" };
-      await login(mockUserData);
-    } catch (error) {
-      console.error("Signup error:", error);
-      Alert.alert("Error", error.message || "Failed to sign up");
+  async function signUpWithEmail() {
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      Alert.alert(error.message);
+    } else {
+      Alert.alert("Check your inbox for a verification email!");
     }
-  };
+    setLoading(false);
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create an Account</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        onChangeText={setEmail}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        secureTextEntry
-        onChangeText={setPassword}
-      />
-
-      <Button title="Sign Up" onPress={handleSignup} />
-
-      <Text style={styles.linkText}>Already have an account?</Text>
-      <Button title="Back to Login" onPress={() => navigation.goBack()} />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Create Account</Text>
+        <Input
+          containerStyle={styles.inputContainer}
+          label="Email"
+          labelStyle={styles.label}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="email@address.com"
+          autoCapitalize="none"
+        />
+        <Input
+          containerStyle={styles.inputContainer}
+          label="Password"
+          labelStyle={styles.label}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+          secureTextEntry
+          autoCapitalize="none"
+        />
+        <Button
+          title="Sign Up"
+          loading={loading}
+          buttonStyle={styles.authButton}
+          containerStyle={styles.buttonContainer}
+          onPress={signUpWithEmail}
+        />
+        <TouchableOpacity
+          style={styles.authLink}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.authLinkText}>
+            Already have an account? Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
-};
-
-export default SignupScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f7f7f7",
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 16,
-    textAlign: "center",
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#333",
+    alignSelf: "center",
+    marginTop: "60%",
+    marginBottom: 50,
   },
-  input: {
-    width: "100%",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    paddingHorizontal: 10,
-    marginBottom: 12,
+  inputContainer: {
+    marginBottom: 20,
   },
-  linkText: {
-    marginVertical: 12,
-    textAlign: "center",
+  label: {
+    fontWeight: "600",
+    color: "#333",
+  },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  authButton: {
+    backgroundColor: "#4a90e2",
+    paddingVertical: 15,
+    borderRadius: 8,
+  },
+  authLink: {
+    alignItems: "center",
+    marginTop: 10,
+  },
+  authLinkText: {
+    color: "#4a90e2",
+    fontSize: 16,
+    fontWeight: "500",
   },
 });

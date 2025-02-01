@@ -1,25 +1,24 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const FollowingFeed = () => {
+export default function LoadingScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>This is the Following Feed!</Text>
+      <Text style={styles.text}>OOTD</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "black",
   },
   text: {
-    fontSize: 20,
-    color: "#333",
+    color: "white",
+    fontSize: 32,
+    fontWeight: "bold",
   },
 });
-
-export default FollowingFeed;

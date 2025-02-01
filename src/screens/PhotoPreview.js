@@ -1,15 +1,48 @@
-import React from 'react';
-import { SafeAreaView, View, Image, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  Image,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { decode } from "base64-arraybuffer";
+import supabase from "../utils/supabaseClient";
+import * as FileSystem from "expo-file-system";
 
 export default function PreviewScreen() {
   const route = useRoute();
   const navigation = useNavigation();
+  const [uploading, setUploading] = useState(false);
 
   // photoUri is passed from Camera
   const { photoUri } = route.params || {};
+
+  const handleUpload = async () => {
+    if (uploading) return;
+
+    setUploading(true);
+    try {
+      const photo = await FileSystem.readAsStringAsync(photoUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(`outfits/${Date.now()}.jpg`, decode(photo), {
+          contentType: "image/jpeg",
+        });
+      if (error) throw new Error(error.message);
+    } catch (e) {
+      console.error("Upload error", e);
+    } finally {
+      setUploading(false);
+    }
+    navigation.navigate("Home", { screen: "FollowingFeed" });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -19,15 +52,24 @@ export default function PreviewScreen() {
         <Button title="No Photo" onPress={() => navigation.goBack()} />
       )}
 
-        <View style={styles.overlay}>
-          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back-circle-outline" size={52} color="#fff" />
-          </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          style={styles.redoButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="close-outline" size={40} color="#fff" />
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.iconButton} onPress={() => alert('Go to next step')}>
-            <Ionicons name="checkmark-circle-outline" size={52} color="#fff" />
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.sendButton} onPress={handleUpload}>
+          <Ionicons name="send-outline" size={45} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
+      {uploading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#ffffff" />
         </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -35,26 +77,37 @@ export default function PreviewScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111', // Helps show full screen contrast
+    backgroundColor: "black",
   },
   fullImage: {
     flex: 1,
-    resizeMode: 'contain', // or 'cover'
+    marginHorizontal: 10,
+    marginVertical: 20,
+    borderRadius: 20,
+    overflow: "hidden",
   },
-  overlay: {
-    position: 'absolute',
-    bottom: 60,               // Positions icons near the bottom
+  sendButton: {
+    position: "absolute",
+    bottom: 40,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
-  iconButton: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    padding: 10,
-    borderRadius: 30,
+  redoButton: {
+    position: "absolute",
+    top: -725,
+    left: 20,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
-
-
